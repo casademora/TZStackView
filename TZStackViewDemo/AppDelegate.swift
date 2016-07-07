@@ -14,14 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         //Appearance proxy for the UISegmentedControl font
-        UISegmentedControl.appearance().setTitleTextAttributes(
+      UISegmentedControl.appearance().setTitleTextAttributes(
         [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size:10.0)!],
-                forState: UIControlState.Normal)
+        for: UIControlState.normal)
 
         //Launch the application
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window = UIWindow(frame: UIScreen.main().bounds)
         window?.rootViewController = ViewController()
         window?.makeKeyAndVisible()
         return true

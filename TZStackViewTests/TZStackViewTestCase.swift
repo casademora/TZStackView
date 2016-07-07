@@ -12,11 +12,12 @@ import XCTest
 import TZStackView
 
 func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ), dispatch_get_main_queue(), closure)
+
+//    dispatch_after(
+//        DispatchTime.now(
+//            dispatch_time_t(DISPATCH_TIME_NOW),
+//            Int64(delay * Double(NSEC_PER_SEC))
+//        ), dispatch_get_main_queue(), closure)
 }
 
 class TZStackViewTestCase: XCTestCase {
@@ -32,7 +33,7 @@ class TZStackViewTestCase: XCTestCase {
         tzStackView = TZStackView(arrangedSubviews: createTestViews())
         tzStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        let window = UIApplication.sharedApplication().windows[0]
+        let window = UIApplication.shared().windows[0]
         window.addSubview(uiStackView)
         window.addSubview(tzStackView)
 
@@ -69,10 +70,10 @@ class TZStackViewTestCase: XCTestCase {
     }
     
     // To override in subclass
-    func configureStackViews(uiStackView: UIStackView, _ tzStackView: TZStackView) {
+    func configureStackViews(_ uiStackView: UIStackView, _ tzStackView: TZStackView) {
     }
     
-    func verifyConstraints(log log: Bool = false) {
+    func verifyConstraints(_ log: Bool = false) {
         // Force constraints to be created
         uiStackView.layoutIfNeeded()
         tzStackView.layoutIfNeeded()
@@ -83,7 +84,7 @@ class TZStackViewTestCase: XCTestCase {
         // Assert same constraints are created
         assertSameConstraints(uiStackView.constraints, tzStackView.constraints)
         
-        for (index, uiArrangedSubview) in uiStackView.arrangedSubviews.enumerate() {
+        for (index, uiArrangedSubview) in uiStackView.arrangedSubviews.enumerated() {
             let tzArrangedSubview = tzStackView.arrangedSubviews[index]
             
             let uiConstraints = nonContentSizeLayoutConstraints(uiArrangedSubview)
@@ -94,17 +95,17 @@ class TZStackViewTestCase: XCTestCase {
         }
     }
     
-    private func nonContentSizeLayoutConstraints(view: UIView) -> [NSLayoutConstraint] {
+    private func nonContentSizeLayoutConstraints(_ view: UIView) -> [NSLayoutConstraint] {
         return view.constraints.filter({ "\($0.dynamicType)" != "NSContentSizeLayoutConstraint" })
     }
     
-    func assertSameConstraints(uiConstraints: [NSLayoutConstraint], _ tzConstraints: [NSLayoutConstraint]) {
+    func assertSameConstraints(_ uiConstraints: [NSLayoutConstraint], _ tzConstraints: [NSLayoutConstraint]) {
         XCTAssertEqual(uiConstraints.count, tzConstraints.count, "Number of constraints")
         if uiConstraints.count != tzConstraints.count {
             return
         }
         
-        for (index, uiConstraint) in uiConstraints.enumerate() {
+        for (index, uiConstraint) in uiConstraints.enumerated() {
             let tzConstraint = tzConstraints[index]
             
             let result = hasSameConstraintMetaData(uiConstraint, tzConstraint)
@@ -114,7 +115,7 @@ class TZStackViewTestCase: XCTestCase {
         }
     }
     
-    private func hasSameConstraintMetaData(layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
+    private func hasSameConstraintMetaData(_ layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
         if layoutConstraint1.constant != layoutConstraint2.constant {
             return false
         }
@@ -130,7 +131,7 @@ class TZStackViewTestCase: XCTestCase {
         return true
     }
     
-    private func isSameConstraint(layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
+    private func isSameConstraint(_ layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
         if !viewsEqual(layoutConstraint1.firstItem, layoutConstraint2.firstItem) {
             return false
         }
@@ -146,7 +147,7 @@ class TZStackViewTestCase: XCTestCase {
         return true
     }
     
-    private func isSameConstraintFlipped(layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
+    private func isSameConstraintFlipped(_ layoutConstraint1: NSLayoutConstraint, _ layoutConstraint2: NSLayoutConstraint) -> Bool {
         if !viewsEqual(layoutConstraint1.firstItem, layoutConstraint2.secondItem) {
             return false
         }
@@ -162,13 +163,13 @@ class TZStackViewTestCase: XCTestCase {
         return true
     }
 
-    private func printConstraints(constraints: [NSLayoutConstraint]) {
+    private func printConstraints(_ constraints: [NSLayoutConstraint]) {
         for constraint in constraints {
             print(constraint.readableString())
         }
     }
     
-    private func viewsEqual(object1: AnyObject?, _ object2: AnyObject?) -> Bool {
+    private func viewsEqual(_ object1: AnyObject?, _ object2: AnyObject?) -> Bool {
         if object1 == nil && object2 == nil {
             return true
         }
@@ -192,8 +193,8 @@ class TZStackViewTestCase: XCTestCase {
         return false
     }
 
-    func assertSameOrder(uiTestViews: [TestView], _ tzTestViews: [TestView]) {
-        for (index, uiTestView) in uiTestViews.enumerate() {
+    func assertSameOrder(_ uiTestViews: [TestView], _ tzTestViews: [TestView]) {
+        for (index, uiTestView) in uiTestViews.enumerated() {
             let tzTestView = tzTestViews[index]
 
             let result = uiTestView.index == tzTestView.index

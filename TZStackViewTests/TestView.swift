@@ -16,7 +16,7 @@ class TestView: UIView {
     init(index: Int, size: CGSize) {
         self.index = index
         self.size = size
-        super.init(frame: CGRectZero)
+        super.init(frame: .zero)
     }
     
     required init(coder aDecoder: NSCoder) {
